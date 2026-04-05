@@ -1,0 +1,51 @@
+/**
+ * Strike detection thresholds. These WILL need tuning in real testing.
+ * Keep them centralised here — debug panel reads/writes these at runtime.
+ */
+export const DETECTION = {
+  /** normalized units per second — MediaPipe coords are in [0,1] image space */
+  WRIST_VELOCITY_THRESHOLD: 2.2,
+  ANKLE_VELOCITY_THRESHOLD: 1.8,
+  ELBOW_VELOCITY_THRESHOLD: 1.5,
+  /** degrees — torso rotation required for rotational strikes */
+  HIP_ROTATION_THRESHOLD: 15,
+  /** ms — same limb cannot fire twice within this window */
+  STRIKE_COOLDOWN_MS: 400,
+  /** rolling frame buffer length */
+  FRAME_BUFFER_SIZE: 10,
+  /** minimum classifier confidence to accept a strike */
+  MIN_CONFIDENCE: 0.6,
+  /** frames to observe before locking in stance */
+  STANCE_DETECTION_FRAMES: 90,
+} as const;
+
+export const POSE = {
+  MIN_POSE_DETECTION_CONFIDENCE: 0.5,
+  MIN_POSE_PRESENCE_CONFIDENCE: 0.5,
+  MIN_TRACKING_CONFIDENCE: 0.5,
+} as const;
+
+export const CAMERA = {
+  WIDTH: 640,
+  HEIGHT: 480,
+} as const;
+
+/**
+ * MediaPipe PoseLandmarker indices (33-landmark model).
+ * See: https://developers.google.com/mediapipe/solutions/vision/pose_landmarker
+ */
+export const LM = {
+  NOSE: 0,
+  LEFT_SHOULDER: 11,
+  RIGHT_SHOULDER: 12,
+  LEFT_ELBOW: 13,
+  RIGHT_ELBOW: 14,
+  LEFT_WRIST: 15,
+  RIGHT_WRIST: 16,
+  LEFT_HIP: 23,
+  RIGHT_HIP: 24,
+  LEFT_KNEE: 25,
+  RIGHT_KNEE: 26,
+  LEFT_ANKLE: 27,
+  RIGHT_ANKLE: 28,
+} as const;

@@ -1,0 +1,103 @@
+/* STRIKE PROTOCOL — HUD-specific styles */
+
+/* ===== CRT Scanline Overlay ===== */
+.scanline-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 245, 212, 0.04) 0px,
+    rgba(0, 245, 212, 0.04) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: screen;
+}
+
+/* ===== Hazard hatch — 45deg stripes for primary CTAs ===== */
+.hazard-hatch {
+  background-image: repeating-linear-gradient(
+    45deg,
+    #ff5f1f 0px,
+    #ff5f1f 10px,
+    #561700 10px,
+    #561700 20px
+  );
+}
+
+.hazard-hatch-subtle {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(255, 95, 31, 0.12) 0px,
+    rgba(255, 95, 31, 0.12) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+}
+
+/* ===== Text glows ===== */
+.text-glow-cyan {
+  text-shadow: 0 0 10px rgba(0, 245, 212, 0.5);
+}
+
+.text-glow-orange {
+  text-shadow: 0 0 10px rgba(255, 95, 31, 0.5);
+}
+
+/* ===== Keyframe animations ===== */
+@keyframes pulse-opacity {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+.animate-pulse-hud {
+  animation: pulse-opacity 1.2s ease-in-out infinite;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  45% { opacity: 1; }
+  50% { opacity: 0.3; }
+  55% { opacity: 1; }
+}
+.animate-flicker {
+  animation: flicker 3s linear infinite;
+}
+
+@keyframes strike-flash {
+  0% { opacity: 0.9; }
+  100% { opacity: 0; }
+}
+.animate-strike-flash {
+  animation: strike-flash 260ms ease-out forwards;
+}
+
+@keyframes counter-bump {
+  0% { transform: translateY(0); color: #FF5F1F; }
+  40% { transform: translateY(-2px); color: #FF5F1F; }
+  100% { transform: translateY(0); color: #FFFFFF; }
+}
+.animate-counter-bump {
+  animation: counter-bump 400ms ease-out;
+}
+
+@keyframes countdown-flash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+.animate-countdown-flash {
+  animation: countdown-flash 0.8s ease-in-out infinite;
+}
+
+/* ===== Corner crosshair utility ===== */
+.crosshair-corner::before,
+.crosshair-corner::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: rgba(91, 65, 56, 0.6);
+  border-style: solid;
+  border-width: 0;
+}
