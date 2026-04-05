@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { CameraFeed } from "@/components/session/CameraFeed";
+import { PoseOverlay } from "@/components/session/PoseOverlay";
 import { Button } from "@/components/ui/Button";
 import { useCamera } from "@/hooks/useCamera";
+import { usePoseDetection } from "@/hooks/usePoseDetection";
 import { DEFAULT_SESSION_CONFIG } from "@/lib/session/config";
 import type { SessionConfig } from "@/lib/session/types";
 
@@ -13,6 +15,24 @@ const PENDING_CONFIG_KEY = "strike-protocol:pending-config";
 export default function SessionPage() {
   const { videoRef, status, error } = useCamera(true);
   const [config, setConfig] = useState<SessionConfig>(DEFAULT_SESSION_CONFIG);
+  const [lastPoseTime, setLastPoseTime] = useState<number>(0);
+
+  const { ready: poseReady, fps, confidence, lastFrame } = usePoseDetection({
+    videoRef,
+    enabled: status === "active",
+    onFrame: (f) => setLastPoseTime(f.timestamp),
+  });
+
+  // "[STEP_INTO_FRAME]" prompt when no pose detected for >2s.
+  const [showStepInto, setShowStepInto] = useState(false);
+  useEffect(() => {
+    if (status !== "active" || !poseReady) return;
+    const id = setInterval(() => {
+      const stale = performance.now() - lastPoseTime > 2000;
+      setShowStepInto(stale);
+    }, 300);
+    return () => clearInterval(id);
+  }, [status, poseReady, lastPoseTime]);
 
   useEffect(() => {
     try {
@@ -52,12 +72,17 @@ export default function SessionPage() {
           className="h-[55vh] min-h-[280px] flex-shrink-0"
           corners={
             <>
-              <div className="absolute top-2 left-2 font-mono text-[9px] text-status tracking-tighter bg-status/10 px-2 py-1 border border-status/20">
-                [POSE_CONFIDENCE: --]
+              <div className="absolute top-2 left-2 font-mono text-[9px] text-status tracking-tighter bg-status/10 px-2 py-1 border border-status/20 z-10">
+                [POSE_CONFIDENCE: {confidence.toFixed(2)}]
               </div>
-              <div className="absolute top-2 right-2 font-mono text-[9px] text-status tracking-tighter bg-status/10 px-2 py-1 border border-status/20">
-                [FPS: --]
+              <div className="absolute top-2 right-2 font-mono text-[9px] text-status tracking-tighter bg-status/10 px-2 py-1 border border-status/20 z-10">
+                [FPS: {fps.toFixed(0).padStart(2, "0")}]
               </div>
+              {!poseReady && status === "active" && (
+                <div className="absolute bottom-2 left-2 font-mono text-[9px] text-hazard tracking-tighter bg-hazard/10 px-2 py-1 border border-hazard/20 z-10 animate-pulse-hud">
+                  [LOADING_POSE_ENGINE]
+                </div>
+              )}
             </>
           }
           overlay={
@@ -67,9 +92,17 @@ export default function SessionPage() {
                   {statusMessage(status, error)}
                 </p>
               </div>
+            ) : showStepInto ? (
+              <div className="text-center px-4">
+                <p className="font-mono text-hazard text-sm tracking-widest animate-pulse-hud">
+                  [STEP_INTO_FRAME]
+                </p>
+              </div>
             ) : null
           }
-        />
+        >
+          <PoseOverlay landmarks={lastFrame?.landmarks ?? null} />
+        </CameraFeed>
 
         {/* Placeholder telemetry strip — Phase 5 wires this up */}
         <section className="flex flex-col gap-2">
