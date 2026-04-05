@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SESSION_REPORT // TACTICAL_TELEMETRY</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#1b1b20",
+                        "surface-container-highest": "#35343a",
+                        "on-tertiary-fixed": "#2a160f",
+                        "on-secondary-fixed": "#00201a",
+                        "on-secondary-fixed-variant": "#005144",
+                        "tertiary-fixed": "#ffdbcf",
+                        "surface": "#131318",
+                        "on-secondary": "#00382f",
+                        "background": "#131318",
+                        "on-primary-fixed": "#390c00",
+                        "tertiary-fixed-dim": "#e3bfb2",
+                        "tertiary-container": "#ae8d82",
+                        "on-tertiary-container": "#3e271f",
+                        "on-background": "#e4e1e9",
+                        "primary-fixed-dim": "#ffb59c",
+                        "tertiary": "#e3bfb2",
+                        "on-surface-variant": "#e3bfb3",
+                        "surface-dim": "#131318",
+                        "on-tertiary-fixed-variant": "#5b4138",
+                        "surface-tint": "#ffb59c",
+                        "outline": "#aa897f",
+                        "surface-container-lowest": "#0e0e13",
+                        "on-error-container": "#ffdad6",
+                        "surface-container": "#1f1f25",
+                        "secondary-container": "#00f2d1",
+                        "outline-variant": "#5b4138",
+                        "primary": "#ffb59c",
+                        "secondary": "#c7fff0",
+                        "primary-container": "#ff5f1f",
+                        "on-surface": "#e4e1e9",
+                        "on-primary": "#5c1900",
+                        "on-error": "#690005",
+                        "secondary-fixed": "#26fedc",
+                        "error": "#ffb4ab",
+                        "surface-variant": "#35343a",
+                        "error-container": "#93000a",
+                        "on-primary-fixed-variant": "#832700",
+                        "on-tertiary": "#422b23",
+                        "surface-container-high": "#2a292f",
+                        "on-secondary-container": "#006a5a",
+                        "secondary-fixed-dim": "#00dfc1",
+                        "primary-fixed": "#ffdbcf",
+                        "on-primary-container": "#561700",
+                        "surface-bright": "#39383e",
+                        "inverse-on-surface": "#303036",
+                        "inverse-surface": "#e4e1e9",
+                        "inverse-primary": "#ab3600"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "0px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["JetBrains Mono"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .scanline-overlay {
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+            background-size: 100% 4px, 3px 100%;
+            pointer-events: none;
+        }
+        .hazard-hatch {
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(0, 0, 0, 0.1) 10px,
+                rgba(0, 0, 0, 0.1) 20px
+            );
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #0e0e13; }
+        ::-webkit-scrollbar-thumb { background: #5b4138; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- SCANLINE EFFECT -->
+<div class="fixed inset-0 z-[100] scanline-overlay pointer-events-none"></div>
+<!-- TopAppBar -->
+<header class="docked full-width top-0 border-b border-[#5b4138]/20 bg-[#0e0e13] dark:bg-[#0e0e13] flex justify-between items-center w-full px-6 py-2 sticky top-0 z-50">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#ff5f1f]" data-icon="terminal">terminal</span>
+<span class="text-[#ff5f1f] font-headline uppercase tracking-[0.15em] font-bold text-sm">[STRIKE_PROTOCOL]</span>
+</div>
+<div class="text-[#ff5f1f] font-headline uppercase tracking-[0.15em] font-bold text-sm">V1.0</div>
+</header>
+<main class="max-w-4xl mx-auto p-4 md:p-8 space-y-8 pb-32">
+<!-- HEADER SECTION -->
+<div class="space-y-1">
+<h1 class="text-[#ff5f1f] font-headline font-bold text-2xl tracking-[0.2em] uppercase">[SESSION_COMPLETE]</h1>
+<p class="font-label text-outline-variant text-xs tracking-widest">[03.APR.2026 // 14:32 GMT]</p>
+<div class="h-px w-full bg-outline-variant/30 mt-4"></div>
+</div>
+<!-- CORE_METRICS PANEL -->
+<div class="grid grid-cols-3 bg-outline-variant/20 border-t border-l border-outline-variant/20">
+<div class="bg-surface-container-lowest p-4 flex flex-col items-center justify-center border-r border-b border-outline-variant/20">
+<span class="font-label text-[10px] text-outline-variant mb-1 uppercase tracking-wider">[TOTAL_STRIKES]</span>
+<span class="font-label font-bold text-[#00F5D4] text-[32px] leading-none tracking-tighter">143</span>
+</div>
+<div class="bg-surface-container-lowest p-4 flex flex-col items-center justify-center border-r border-b border-outline-variant/20">
+<span class="font-label text-[10px] text-outline-variant mb-1 uppercase tracking-wider">[DURATION]</span>
+<span class="font-label font-bold text-white text-[32px] leading-none tracking-tighter">09:00</span>
+</div>
+<div class="bg-surface-container-lowest p-4 flex flex-col items-center justify-center border-r border-b border-outline-variant/20">
+<span class="font-label text-[10px] text-outline-variant mb-1 uppercase tracking-wider">[STRIKE_RATE]</span>
+<span class="font-label font-bold text-white text-[32px] leading-none tracking-tighter">15.9</span>
+</div>
+</div>
+<!-- STRIKE_ANALYSIS PANEL -->
+<div class="space-y-4">
+<div class="flex items-center gap-4">
+<span class="font-label text-xs text-on-surface tracking-widest">[STRIKE_ANALYSIS]</span>
+<div class="flex-grow h-px bg-outline-variant/20"></div>
+</div>
+<div class="space-y-3 font-label text-[11px]">
+<!-- ROW: CROSS (Dominant) -->
+<div class="grid grid-cols-12 items-center gap-4 group">
+<div class="col-span-2 text-primary-fixed-dim uppercase tracking-tighter">CROSS</div>
+<div class="col-span-8 flex gap-1">
+<div class="h-4 w-full bg-surface-container-highest relative">
+<div class="h-full bg-primary-container w-[85%] relative">
+<div class="absolute inset-0 hazard-hatch opacity-20"></div>
+</div>
+</div>
+</div>
+<div class="col-span-2 flex items-center justify-between">
+<span class="text-on-surface">42</span>
+<span class="text-primary text-[9px] font-bold">◄ DOMINANT</span>
+</div>
+</div>
+<!-- OTHERS -->
+<div class="grid grid-cols-12 items-center gap-4 opacity-70">
+<div class="col-span-2 text-outline-variant uppercase">JAB</div>
+<div class="col-span-8 flex gap-0.5">
+<div class="h-3 w-full bg-surface-container-highest">
+<div class="h-full bg-secondary-container w-[70%]"></div>
+</div>
+</div>
+<div class="col-span-2 text-on-surface">31</div>
+</div>
+<div class="grid grid-cols-12 items-center gap-4 opacity-70">
+<div class="col-span-2 text-outline-variant uppercase">KICK</div>
+<div class="col-span-8 flex gap-0.5">
+<div class="h-3 w-full bg-surface-container-highest">
+<div class="h-full bg-secondary-container w-[55%]"></div>
+</div>
+</div>
+<div class="col-span-2 text-on-surface">24</div>
+</div>
+<div class="grid grid-cols-12 items-center gap-4 opacity-70">
+<div class="col-span-2 text-outline-variant uppercase">HOOK</div>
+<div class="col-span-8 flex gap-0.5">
+<div class="h-3 w-full bg-surface-container-highest">
+<div class="h-full bg-secondary-container w-[40%]"></div>
+</div>
+</div>
+<div class="col-span-2 text-on-surface">18</div>
+</div>
+<div class="grid grid-cols-12 items-center gap-4 opacity-70">
+<div class="col-span-2 text-outline-variant uppercase">KNEE</div>
+<div class="col-span-8 flex gap-0.5">
+<div class="h-3 w-full bg-surface-container-highest">
+<div class="h-full bg-secondary-container w-[25%]"></div>
+</div>
+</div>
+<div class="col-span-2 text-on-surface">11</div>
+</div>
+<div class="grid grid-cols-12 items-center gap-4 opacity-70">
+<div class="col-span-2 text-outline-variant uppercase">UPPER</div>
+<div class="col-span-8 flex gap-0.5">
+<div class="h-3 w-full bg-surface-container-highest">
+<div class="h-full bg-secondary-container w-[15%]"></div>
+</div>
+</div>
+<div class="col-span-2 text-on-surface">9</div>
+</div>
+<div class="grid grid-cols-12 items-center gap-4 opacity-70">
+<div class="col-span-2 text-outline-variant uppercase">TEEP</div>
+<div class="col-span-8 flex gap-0.5">
+<div class="h-3 w-full bg-surface-container-highest">
+<div class="h-full bg-secondary-container w-[10%]"></div>
+</div>
+</div>
+<div class="col-span-2 text-on-surface">5</div>
+</div>
+<div class="grid grid-cols-12 items-center gap-4 opacity-70">
+<div class="col-span-2 text-outline-variant uppercase">ELBOW</div>
+<div class="col-span-8 flex gap-0.5">
+<div class="h-3 w-full bg-surface-container-highest">
+<div class="h-full bg-secondary-container w-[5%]"></div>
+</div>
+</div>
+<div class="col-span-2 text-on-surface">3</div>
+</div>
+</div>
+</div>
+<!-- ROUND_BREAKDOWN PANEL -->
+<div class="space-y-4">
+<div class="flex items-center gap-4">
+<span class="font-label text-xs text-on-surface tracking-widest">[ROUND_BREAKDOWN]</span>
+<div class="flex-grow h-px bg-outline-variant/20"></div>
+</div>
+<div class="bg-surface-container-low overflow-hidden">
+<table class="w-full font-label text-[10px] text-left">
+<thead>
+<tr class="text-outline-variant border-b border-outline-variant/20">
+<th class="px-4 py-3 font-medium">[RND]</th>
+<th class="px-4 py-3 font-medium">[STRIKES]</th>
+<th class="px-4 py-3 font-medium">[STR/MIN]</th>
+<th class="px-4 py-3 font-medium">[TOP_STRIKE]</th>
+</tr>
+</thead>
+<tbody class="text-on-surface">
+<tr class="border-b border-outline-variant/10">
+<td class="px-4 py-3">R1</td>
+<td class="px-4 py-3">54</td>
+<td class="px-4 py-3">18.0</td>
+<td class="px-4 py-3 text-secondary-container">CROSS (19)</td>
+</tr>
+<tr class="border-b border-outline-variant/10">
+<td class="px-4 py-3">R2</td>
+<td class="px-4 py-3">51</td>
+<td class="px-4 py-3">17.0</td>
+<td class="px-4 py-3 text-secondary-container">JAB (16)</td>
+</tr>
+<tr class="border-b border-outline-variant/10">
+<td class="px-4 py-3">R3</td>
+<td class="px-4 py-3">38</td>
+<td class="px-4 py-3">12.7</td>
+<td class="px-4 py-3 text-secondary-container">KICK (14)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="font-label text-[9px] text-primary-container tracking-tighter">
+                [NOTE: -29.6% STRIKE_RATE DECLINE R1→R3]
+            </p>
+</div>
+<!-- TIMELINE PANEL -->
+<div class="space-y-4">
+<div class="flex items-center gap-4">
+<span class="font-label text-xs text-on-surface tracking-widest">[TIMELINE_FLOW]</span>
+<div class="flex-grow h-px bg-outline-variant/20"></div>
+</div>
+<div class="relative h-12 w-full flex items-center">
+<div class="absolute w-full h-px bg-outline-variant/30"></div>
+<!-- ACTIVITY DOTS -->
+<div class="absolute inset-0 flex justify-between items-center px-2">
+<div class="w-1 h-1 bg-secondary shadow-[0_0_8px_#c7fff0] rounded-full"></div>
+<div class="w-1 h-1 bg-secondary rounded-full"></div>
+<div class="w-1 h-1 bg-secondary rounded-full"></div>
+<div class="w-1 h-1 bg-secondary rounded-full opacity-40"></div>
+<div class="w-1 h-1 bg-secondary rounded-full"></div>
+<div class="w-1 h-1 bg-secondary rounded-full"></div>
+<div class="w-1 h-1 bg-secondary rounded-full opacity-20"></div>
+<div class="w-1 h-1 bg-secondary rounded-full"></div>
+</div>
+<!-- ROUND DIVIDERS -->
+<div class="absolute left-1/3 h-8 w-px bg-primary-container shadow-[0_0_8px_#ff5f1f]"></div>
+<div class="absolute left-2/3 h-8 w-px bg-primary-container shadow-[0_0_8px_#ff5f1f]"></div>
+</div>
+</div>
+<!-- BOTTOM ACTIONS -->
+<div class="pt-8 space-y-6">
+<div class="flex flex-col md:flex-row gap-4">
+<button class="flex-1 bg-primary-container text-on-primary-fixed-variant font-headline font-bold py-4 uppercase tracking-[0.2em] relative overflow-hidden active:scale-[0.98] transition-transform">
+<div class="absolute inset-0 hazard-hatch opacity-30"></div>
+<span class="relative z-10">[ EXPORT // SHARE ]</span>
+</button>
+<button class="flex-1 border border-secondary-container text-secondary-container font-headline font-bold py-4 uppercase tracking-[0.2em] hover:bg-secondary-container/10 transition-colors active:scale-[0.98]">
+                    [ NEW SESSION ]
+                </button>
+</div>
+<div class="text-center">
+<a class="font-label text-[10px] text-outline-variant hover:text-secondary tracking-widest transition-colors uppercase" href="#">
+                    ← RETURN_HOME
+                </a>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-stretch h-16 bg-[#0e0e13] dark:bg-[#0e0e13] border-t border-[#5b4138]">
+<div class="flex flex-col items-center justify-center text-[#5b4138] p-2 hover:bg-[#00f2d1]/10 hover:text-[#00f2d1] flex-1">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-['JetBrains_Mono'] uppercase tracking-tighter text-[10px]">[TELEMETRY]</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#5b4138] p-2 hover:bg-[#00f2d1]/10 hover:text-[#00f2d1] flex-1">
+<span class="material-symbols-outlined" data-icon="target">target</span>
+<span class="font-['JetBrains_Mono'] uppercase tracking-tighter text-[10px]">[TACTICAL]</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-[#ff5f1f]/20 text-[#ff5f1f] border-x border-[#ff5f1f] p-2 flex-1">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-['JetBrains_Mono'] uppercase tracking-tighter text-[10px]">[LOGS]</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#5b4138] p-2 hover:bg-[#00f2d1]/10 hover:text-[#00f2d1] flex-1">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-['JetBrains_Mono'] uppercase tracking-tighter text-[10px]">[SYSTEM]</span>
+</div>
+</nav>
+</body></html>
