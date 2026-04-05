@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#1b1b20",
+                        "surface-container-highest": "#35343a",
+                        "on-tertiary-fixed": "#2a160f",
+                        "on-secondary-fixed": "#00201a",
+                        "on-secondary-fixed-variant": "#005144",
+                        "tertiary-fixed": "#ffdbcf",
+                        "surface": "#131318",
+                        "on-secondary": "#00382f",
+                        "background": "#131318",
+                        "on-primary-fixed": "#390c00",
+                        "tertiary-fixed-dim": "#e3bfb2",
+                        "tertiary-container": "#ae8d82",
+                        "on-tertiary-container": "#3e271f",
+                        "on-background": "#e4e1e9",
+                        "primary-fixed-dim": "#ffb59c",
+                        "tertiary": "#e3bfb2",
+                        "on-surface-variant": "#e3bfb3",
+                        "surface-dim": "#131318",
+                        "on-tertiary-fixed-variant": "#5b4138",
+                        "surface-tint": "#ffb59c",
+                        "outline": "#aa897f",
+                        "surface-container-lowest": "#0e0e13",
+                        "on-error-container": "#ffdad6",
+                        "surface-container": "#1f1f25",
+                        "secondary-container": "#00f2d1",
+                        "outline-variant": "#5b4138",
+                        "primary": "#ffb59c",
+                        "secondary": "#c7fff0",
+                        "primary-container": "#ff5f1f",
+                        "on-surface": "#e4e1e9",
+                        "on-primary": "#5c1900",
+                        "on-error": "#690005",
+                        "secondary-fixed": "#26fedc",
+                        "error": "#ffb4ab",
+                        "surface-variant": "#35343a",
+                        "error-container": "#93000a",
+                        "on-primary-fixed-variant": "#832700",
+                        "on-tertiary": "#422b23",
+                        "surface-container-high": "#2a292f",
+                        "on-secondary-container": "#006a5a",
+                        "secondary-fixed-dim": "#00dfc1",
+                        "primary-fixed": "#ffdbcf",
+                        "on-primary-container": "#561700",
+                        "surface-bright": "#39383e",
+                        "inverse-on-surface": "#303036",
+                        "inverse-surface": "#e4e1e9",
+                        "inverse-primary": "#ab3600"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["JetBrains Mono"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scanline {
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+        .hazard-hatch {
+            background: repeating-linear-gradient(
+                45deg,
+                #ff5f1f,
+                #ff5f1f 10px,
+                #561700 10px,
+                #561700 20px
+            );
+        }
+        .copper-trace { border: 1px solid rgba(91, 65, 56, 0.3); }
+        .text-glow-cyan { text-shadow: 0 0 10px rgba(0, 242, 209, 0.5); }
+        .text-glow-orange { text-shadow: 0 0 10px rgba(255, 95, 31, 0.5); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-white min-h-screen flex flex-col relative overflow-x-hidden">
+<!-- CRT Overlay -->
+<div class="fixed inset-0 z-[100] scanline opacity-30 pointer-events-none"></div>
+<!-- Top Navigation Anchor -->
+<header class="bg-[#0e0e13] dark:bg-[#0e0e13] text-[#ff5f1f] dark:text-[#ff5f1f] docked full-width top-0 border-b border-[#5b4138]/20 flex justify-between items-center w-full px-6 py-2 z-50">
+<div class="flex flex-col">
+<span class="font-['Space_Grotesk'] uppercase tracking-[0.15em] font-bold text-sm">[STRIKE_PROTOCOL]</span>
+<span class="font-['JetBrains_Mono'] text-[9px] text-[#5b4138]">V1.0</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 bg-[#00f2d1] animate-pulse"></span>
+<span class="font-['JetBrains_Mono'] text-[10px] text-[#00f2d1]">[SYSTEM_ONLINE]</span>
+</div>
+<button class="material-symbols-outlined text-[#5b4138] hover:text-[#ff5f1f] transition-colors" data-icon="settings">settings</button>
+</div>
+</header>
+<!-- Global Telemetry Status Line -->
+<div class="w-full bg-[#0e0e13] border-b border-[#5b4138]/20 py-1 px-6">
+<p class="font-['JetBrains_Mono'] text-[10px] text-[#5b4138] whitespace-nowrap overflow-hidden">
+<span class="text-[#00f2d1]">[SYS]</span> CAMERA: <span class="text-on-background">READY</span> | POSE_ENGINE: <span class="text-on-background">LOADED</span> | LAST_SESSION: <span class="text-on-background">2d AGO</span> | LATENCY: <span class="text-[#00f2d1]">12ms</span> | BUFF: <span class="text-on-background">OK</span>
+</p>
+</div>
+<main class="flex-grow container mx-auto px-6 py-8 flex flex-col gap-8 max-w-2xl">
+<!-- Last Session Data Instrument -->
+<section class="flex flex-col gap-2">
+<h2 class="font-['JetBrains_Mono'] text-[11px] text-[#5b4138] tracking-widest">[LAST_SESSION // 03.APR.2026]</h2>
+<div class="bg-surface-container-lowest border border-[#5b4138] p-4 flex flex-col gap-4">
+<div class="grid grid-cols-3 gap-4">
+<div class="flex flex-col gap-1 border-r border-[#5b4138]/20">
+<span class="font-['JetBrains_Mono'] text-[9px] text-[#5b4138]">STRIKES</span>
+<span class="font-['Space_Grotesk'] text-2xl font-bold text-[#00f2d1] text-glow-cyan">143</span>
+</div>
+<div class="flex flex-col gap-1 border-r border-[#5b4138]/20">
+<span class="font-['JetBrains_Mono'] text-[9px] text-[#5b4138]">DURATION</span>
+<span class="font-['Space_Grotesk'] text-2xl font-bold text-on-background">09:00</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-['JetBrains_Mono'] text-[9px] text-[#5b4138]">STR/MIN</span>
+<span class="font-['Space_Grotesk'] text-2xl font-bold text-on-background">15.9</span>
+</div>
+</div>
+<div class="pt-2 border-t border-[#5b4138]/20 flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-[#ff5f1f]"></span>
+<span class="font-['JetBrains_Mono'] text-[10px] text-[#5b4138]">TOP_STRIKE: <span class="text-on-background">CROSS</span> — <span class="text-[#ff5f1f]">47</span></span>
+</div>
+</div>
+</section>
+<!-- Session Config Instrument -->
+<section class="flex flex-col gap-4">
+<h2 class="font-['JetBrains_Mono'] text-[11px] text-[#5b4138] tracking-widest">[SESSION_CONFIG]</h2>
+<!-- Round Length -->
+<div class="flex flex-col gap-2">
+<span class="font-['JetBrains_Mono'] text-[10px] text-on-surface-variant">[ROUND_LENGTH]</span>
+<div class="grid grid-cols-4 border border-[#5b4138]">
+<button class="py-3 text-[12px] font-['JetBrains_Mono'] border-r border-[#5b4138] text-[#5b4138] hover:bg-[#ff5f1f]/10">2:00</button>
+<button class="py-3 text-[12px] font-['JetBrains_Mono'] border-r border-[#5b4138] bg-[#00f2d1]/20 text-[#00f2d1]">3:00</button>
+<button class="py-3 text-[12px] font-['JetBrains_Mono'] border-r border-[#5b4138] text-[#5b4138] hover:bg-[#ff5f1f]/10">5:00</button>
+<button class="py-3 text-[12px] font-['JetBrains_Mono'] text-[#5b4138] hover:bg-[#ff5f1f]/10">FREE</button>
+</div>
+</div>
+<!-- Round Count -->
+<div class="flex flex-col gap-2">
+<span class="font-['JetBrains_Mono'] text-[10px] text-on-surface-variant">[ROUND_COUNT]</span>
+<div class="grid grid-cols-4 border border-[#5b4138]">
+<button class="py-3 text-[12px] font-['JetBrains_Mono'] border-r border-[#5b4138] text-[#5b4138] hover:bg-[#ff5f1f]/10">1</button>
+<button class="py-3 text-[12px] font-['JetBrains_Mono'] border-r border-[#5b4138] bg-[#00f2d1]/20 text-[#00f2d1]">3</button>
+<button class="py-3 text-[12px] font-['JetBrains_Mono'] border-r border-[#5b4138] text-[#5b4138] hover:bg-[#ff5f1f]/10">5</button>
+<button class="py-3 text-[12px] font-['JetBrains_Mono'] text-[#5b4138] hover:bg-[#ff5f1f]/10">∞</button>
+</div>
+</div>
+<!-- Rest Interval -->
+<div class="flex flex-col gap-2">
+<span class="font-['JetBrains_Mono'] text-[10px] text-on-surface-variant">[REST_INTERVAL]</span>
+<div class="grid grid-cols-3 border border-[#5b4138]">
+<button class="py-3 text-[12px] font-['JetBrains_Mono'] border-r border-[#5b4138] text-[#5b4138] hover:bg-[#ff5f1f]/10">0:30</button>
+<button class="py-3 text-[12px] font-['JetBrains_Mono'] border-r border-[#5b4138] bg-[#00f2d1]/20 text-[#00f2d1]">1:00</button>
+<button class="py-3 text-[12px] font-['JetBrains_Mono'] text-[#5b4138] hover:bg-[#ff5f1f]/10">1:30</button>
+</div>
+</div>
+</section>
+<!-- Primary Action -->
+<div class="mt-4">
+<button class="w-full h-14 hazard-hatch border-2 border-[#ff5f1f] group relative overflow-hidden transition-transform active:scale-[0.98]">
+<span class="relative z-10 font-['Space_Grotesk'] font-extrabold text-black tracking-[0.2em] uppercase">[ INITIATE SESSION ]</span>
+<div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity"></div>
+</button>
+</div>
+<!-- System Visual Decor -->
+<div class="flex justify-between items-end mt-4">
+<div class="w-24 h-24 border-l-2 border-b-2 border-[#5b4138] p-2 flex flex-col justify-end">
+<span class="font-['JetBrains_Mono'] text-[8px] text-[#5b4138] leading-tight">REF_491-B<br/>POS_X: 0.12<br/>POS_Y: 0.88</span>
+</div>
+<div class="flex-grow mx-4 mb-2 h-[1px] bg-[#5b4138]/20"></div>
+<div class="text-right">
+<span class="font-['JetBrains_Mono'] text-[8px] text-[#5b4138] uppercase">Strike_Protocol // Muay Thai Telemetry // V1.0</span>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="bg-[#0e0e13] text-[#ff5f1f] font-['JetBrains_Mono'] uppercase tracking-tighter text-[10px] docked full-width bottom-0 border-t border-[#5b4138] fixed bottom-0 left-0 w-full z-50 flex justify-around items-stretch h-16">
+<a class="flex flex-col items-center justify-center bg-[#ff5f1f]/20 text-[#ff5f1f] border-x border-[#ff5f1f] p-2 flex-1" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span>[TELEMETRY]</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#5b4138] p-2 flex-1 hover:bg-[#00f2d1]/10 hover:text-[#00f2d1]" href="#">
+<span class="material-symbols-outlined" data-icon="target">target</span>
+<span>[TACTICAL]</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#5b4138] p-2 flex-1 hover:bg-[#00f2d1]/10 hover:text-[#00f2d1]" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span>[LOGS]</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#5b4138] p-2 flex-1 hover:bg-[#00f2d1]/10 hover:text-[#00f2d1]" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>[SYSTEM]</span>
+</a>
+</nav>
+<!-- Visual Artifacts -->
+<div class="fixed top-[20%] right-[-20px] rotate-90 origin-center pointer-events-none opacity-20">
+<span class="font-['JetBrains_Mono'] text-[10px] text-[#5b4138] tracking-[0.5em] uppercase">Tactical_Precision_HUD_V.01</span>
+</div>
+</body></html>
