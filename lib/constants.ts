@@ -1,8 +1,18 @@
 /**
  * Strike detection thresholds. These WILL need tuning in real testing.
- * Keep them centralised here — debug panel reads/writes these at runtime.
+ * Kept as a mutable object so the debug panel (?debug=true) can adjust
+ * them live at runtime without a rebuild.
  */
-export const DETECTION = {
+export const DETECTION: {
+  WRIST_VELOCITY_THRESHOLD: number;
+  ANKLE_VELOCITY_THRESHOLD: number;
+  ELBOW_VELOCITY_THRESHOLD: number;
+  HIP_ROTATION_THRESHOLD: number;
+  STRIKE_COOLDOWN_MS: number;
+  FRAME_BUFFER_SIZE: number;
+  MIN_CONFIDENCE: number;
+  STANCE_DETECTION_FRAMES: number;
+} = {
   /** normalized units per second — MediaPipe coords are in [0,1] image space */
   WRIST_VELOCITY_THRESHOLD: 2.2,
   ANKLE_VELOCITY_THRESHOLD: 1.8,
@@ -17,7 +27,7 @@ export const DETECTION = {
   MIN_CONFIDENCE: 0.6,
   /** frames to observe before locking in stance */
   STANCE_DETECTION_FRAMES: 90,
-} as const;
+};
 
 export const POSE = {
   MIN_POSE_DETECTION_CONFIDENCE: 0.5,

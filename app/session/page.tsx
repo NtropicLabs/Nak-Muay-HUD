@@ -15,7 +15,7 @@ import { useSession } from "@/hooks/useSession";
 import { useStrikeDetection } from "@/hooks/useStrikeDetection";
 import { useTimer } from "@/hooks/useTimer";
 import { DEFAULT_SESSION_CONFIG } from "@/lib/session/config";
-import { DETECTION } from "@/lib/constants";
+import { DETECTION, LM } from "@/lib/constants";
 import type { DetectedStrike } from "@/lib/pose/classifier";
 import type { SessionConfig, StrikeType } from "@/lib/session/types";
 
@@ -140,14 +140,48 @@ function SessionPageInner() {
     if (cameraStatus === "active" && poseReady) setStage("body-check");
   }, [stage, cameraStatus, poseReady]);
 
-  useEffect(() => {
-    if (stage !== "body-check") return;
-    // When confidence sustained, move to countdown.
-    if (confidence >= 0.6 && lastFrame) {
-      setStage("countdown");
-      setCountdown(3);
+  // Require ALL key landmarks (head, shoulders, hips, ankles) to be
+  // visible with visibility >= 0.5 before leaving body-check. This is a
+  // stricter proxy for "full body in frame" than average confidence.
+  const bodyCheckPassed = useMemo(() => {
+    if (!lastFrame) return false;
+    const required = [
+      LM.NOSE,
+      LM.LEFT_SHOULDER,
+      LM.RIGHT_SHOULDER,
+      LM.LEFT_HIP,
+      LM.RIGHT_HIP,
+      LM.LEFT_ANKLE,
+      LM.RIGHT_ANKLE,
+    ];
+    for (const i of required) {
+      const lm = lastFrame.landmarks[i];
+      if (!lm) return false;
+      const vis = lm.visibility ?? 0;
+      if (vis < 0.5) return false;
+      // Also require the point to actually fall inside the frame.
+      if (lm.x < 0 || lm.x > 1 || lm.y < 0 || lm.y > 1) return false;
     }
-  }, [stage, confidence, lastFrame]);
+    return true;
+  }, [lastFrame]);
+
+  const bodyCheckHoldRef = useRef(0);
+  useEffect(() => {
+    if (stage !== "body-check") {
+      bodyCheckHoldRef.current = 0;
+      return;
+    }
+    if (bodyCheckPassed) {
+      bodyCheckHoldRef.current += 1;
+      // ~10 frames (~0.3s at 30fps) of sustained full-body visibility
+      if (bodyCheckHoldRef.current >= 10) {
+        setStage("countdown");
+        setCountdown(3);
+      }
+    } else {
+      bodyCheckHoldRef.current = 0;
+    }
+  }, [stage, bodyCheckPassed, lastFrame]);
 
   useEffect(() => {
     if (stage !== "countdown") return;
@@ -275,7 +309,9 @@ function SessionPageInner() {
                   [BODY_CHECK // AWAITING_FULL_FRAME]
                 </p>
                 <p className="font-mono text-structural text-[10px] tracking-widest mt-2">
-                  CONFIDENCE: {confidence.toFixed(2)} — NEED ≥ 0.60
+                  {bodyCheckPassed
+                    ? "[LOCKED_IN] HOLD STEADY…"
+                    : "[STEP_BACK] HEAD + HIPS + ANKLES MUST BE VISIBLE"}
                 </p>
               </div>
             ) : stage === "countdown" ? (
@@ -339,27 +375,124 @@ function DebugPanel({
 }: {
   debug: ReturnType<typeof useStrikeDetection>["debug"];
 }) {
+  // Local state mirrors DETECTION so the sliders re-render this component.
+  const [thresholds, setThresholds] = useState({
+    WRIST_VELOCITY_THRESHOLD: DETECTION.WRIST_VELOCITY_THRESHOLD,
+    ANKLE_VELOCITY_THRESHOLD: DETECTION.ANKLE_VELOCITY_THRESHOLD,
+    ELBOW_VELOCITY_THRESHOLD: DETECTION.ELBOW_VELOCITY_THRESHOLD,
+    HIP_ROTATION_THRESHOLD: DETECTION.HIP_ROTATION_THRESHOLD,
+    MIN_CONFIDENCE: DETECTION.MIN_CONFIDENCE,
+    STRIKE_COOLDOWN_MS: DETECTION.STRIKE_COOLDOWN_MS,
+  });
+
+  const setThreshold = <K extends keyof typeof thresholds>(
+    key: K,
+    value: number
+  ) => {
+    (DETECTION as unknown as Record<string, number>)[key as string] = value;
+    setThresholds((t) => ({ ...t, [key]: value }));
+  };
+
   return (
     <section className="border border-structural p-3 bg-panel-bg font-mono text-[10px] text-structural">
-      <div className="text-hazard mb-1">[DEBUG_PANEL]</div>
+      <div className="text-hazard mb-2">[DEBUG_PANEL]</div>
       {debug ? (
-        <div className="grid grid-cols-2 gap-x-4 gap-y-0.5">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 mb-3">
           <span>WRIST_V_L: {debug.wristVelL.toFixed(2)}</span>
           <span>WRIST_V_R: {debug.wristVelR.toFixed(2)}</span>
           <span>ANKLE_V_L: {debug.ankleVelL.toFixed(2)}</span>
           <span>ANKLE_V_R: {debug.ankleVelR.toFixed(2)}</span>
           <span>HIP_ROT: {debug.hipRotation.toFixed(1)}°</span>
-          <span>ELBOW_L: {debug.elbowAngleL.toFixed(0)}°</span>
-          <span>ELBOW_R: {debug.elbowAngleR.toFixed(0)}°</span>
-          <span>
-            WRIST_THR: {DETECTION.WRIST_VELOCITY_THRESHOLD} / ANKLE_THR:{" "}
-            {DETECTION.ANKLE_VELOCITY_THRESHOLD}
-          </span>
+          <span>ELBOW_L/R: {debug.elbowAngleL.toFixed(0)}°/{debug.elbowAngleR.toFixed(0)}°</span>
         </div>
       ) : (
-        <div>[AWAITING_DATA]</div>
+        <div className="mb-3">[AWAITING_DATA]</div>
       )}
+      <div className="border-t border-structural/30 pt-2 space-y-1">
+        <DebugSlider
+          label="WRIST_THR"
+          min={0.5}
+          max={6}
+          step={0.1}
+          value={thresholds.WRIST_VELOCITY_THRESHOLD}
+          onChange={(v) => setThreshold("WRIST_VELOCITY_THRESHOLD", v)}
+        />
+        <DebugSlider
+          label="ANKLE_THR"
+          min={0.5}
+          max={6}
+          step={0.1}
+          value={thresholds.ANKLE_VELOCITY_THRESHOLD}
+          onChange={(v) => setThreshold("ANKLE_VELOCITY_THRESHOLD", v)}
+        />
+        <DebugSlider
+          label="ELBOW_THR"
+          min={0.3}
+          max={5}
+          step={0.1}
+          value={thresholds.ELBOW_VELOCITY_THRESHOLD}
+          onChange={(v) => setThreshold("ELBOW_VELOCITY_THRESHOLD", v)}
+        />
+        <DebugSlider
+          label="HIP_ROT_THR"
+          min={5}
+          max={60}
+          step={1}
+          value={thresholds.HIP_ROTATION_THRESHOLD}
+          onChange={(v) => setThreshold("HIP_ROTATION_THRESHOLD", v)}
+        />
+        <DebugSlider
+          label="MIN_CONF"
+          min={0.3}
+          max={0.95}
+          step={0.05}
+          value={thresholds.MIN_CONFIDENCE}
+          onChange={(v) => setThreshold("MIN_CONFIDENCE", v)}
+        />
+        <DebugSlider
+          label="COOLDOWN_MS"
+          min={100}
+          max={1200}
+          step={50}
+          value={thresholds.STRIKE_COOLDOWN_MS}
+          onChange={(v) => setThreshold("STRIKE_COOLDOWN_MS", v)}
+        />
+      </div>
     </section>
+  );
+}
+
+function DebugSlider({
+  label,
+  min,
+  max,
+  step,
+  value,
+  onChange,
+}: {
+  label: string;
+  min: number;
+  max: number;
+  step: number;
+  value: number;
+  onChange: (v: number) => void;
+}) {
+  return (
+    <label className="flex items-center gap-2 text-[9px]">
+      <span className="w-20 text-structural">{label}</span>
+      <input
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="flex-1 accent-hazard"
+      />
+      <span className="w-10 text-right text-text-primary">
+        {Number.isInteger(step) ? value.toFixed(0) : value.toFixed(2)}
+      </span>
+    </label>
   );
 }
 
