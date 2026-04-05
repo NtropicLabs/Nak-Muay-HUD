@@ -13,18 +13,21 @@ export const DETECTION: {
   MIN_CONFIDENCE: number;
   STANCE_DETECTION_FRAMES: number;
 } = {
-  /** normalized units per second — MediaPipe coords are in [0,1] image space */
-  WRIST_VELOCITY_THRESHOLD: 2.2,
-  ANKLE_VELOCITY_THRESHOLD: 1.8,
-  ELBOW_VELOCITY_THRESHOLD: 1.5,
+  /** normalized units per second — MediaPipe coords are in [0,1] image space.
+   *  Combined with the travel-distance gate in the classifier, this needs
+   *  to be high enough to reject jitter but low enough that real punches
+   *  from any camera distance clear it. */
+  WRIST_VELOCITY_THRESHOLD: 1.6,
+  ANKLE_VELOCITY_THRESHOLD: 1.4,
+  ELBOW_VELOCITY_THRESHOLD: 1.2,
   /** degrees — torso rotation required for rotational strikes */
   HIP_ROTATION_THRESHOLD: 15,
   /** ms — same limb cannot fire twice within this window */
-  STRIKE_COOLDOWN_MS: 400,
+  STRIKE_COOLDOWN_MS: 450,
   /** rolling frame buffer length */
-  FRAME_BUFFER_SIZE: 10,
+  FRAME_BUFFER_SIZE: 12,
   /** minimum classifier confidence to accept a strike */
-  MIN_CONFIDENCE: 0.6,
+  MIN_CONFIDENCE: 0.7,
   /** frames to observe before locking in stance */
   STANCE_DETECTION_FRAMES: 90,
 };
